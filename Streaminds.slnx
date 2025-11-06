@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Streaminds.Domain/Streaminds.Domain.csproj" />
+  <Project Path="Streaminds.Infrastructure/Streaminds.Infrastructure.csproj" />
+  <Project Path="Streaminds.Web/Streaminds.Web.csproj" />
+</Solution>

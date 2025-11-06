@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>@ViewData["Title"] - Streaminds</title>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+ <link href="/css/site.css" rel="stylesheet" />
+</head>
+<body>
+ <header class="site-header">
+ <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+ <div class="container">
+ <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+ <div class="brand-placeholder">SI</div>
+ <span class="ms-2 brand-text">Streaminds</span>
+ </a>
+ <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="navMain">
+ <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-4">
+ <li class="nav-item"><a class="nav-link text-dark" asp-controller="ProductosStreaming" asp-action="Index">Productos</a></li>
+ <li class="nav-item"><a class="nav-link text-dark" asp-controller="Clientes" asp-action="Index">Clientes</a></li>
+ <li class="nav-item"><a class="nav-link text-dark" asp-controller="Ordenes" asp-action="Create">Ordenes</a></li>
+ </ul>
+ <ul class="navbar-nav ms-auto">
+ @if (User?.Identity?.IsAuthenticated == true)
+ {
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle text-dark" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">@User.Identity.Name</a>
+ <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+ <li>
+ <form asp-controller="Account" asp-action="Logout" method="post" class="px-3 py-2">
+ <button type="submit" class="btn btn-link text-decoration-none">Logout</button>
+ </form>
+ </li>
+ </ul>
+ </li>
+ }
+ else
+ {
+ <li class="nav-item"><a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a></li>
+ <li class="nav-item"><a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a></li>
+ }
+ </ul>
+ </div>
+ </div>
+ </nav>
+
+ <div class="hero simple-hero mt-3">
+ <div class="container hero-content text-center text-white">
+ <h1 class="display-4 fw-bold">Experiencias de streaming, reinventadas</h1>
+ <p class="lead mt-3">Contenido de alta calidad, planes flexibles y acceso instantáneo. Descubre, mira y disfruta.</p>
+ <a class="btn btn-lg btn-primary me-2" asp-controller="ProductosStreaming" asp-action="Index">Ver Productos</a>
+ <a class="btn btn-lg btn-outline-light" asp-controller="Home" asp-action="Index">Más información</a>
+ </div>
+ </div>
+ </header>
+
+ <main class="container mt-5">
+ @RenderBody()
+ </main>
+
+ <footer class="footer py-4 mt-5">
+ <div class="container d-flex justify-content-between align-items-center">
+ <div>&copy; @DateTime.UtcNow.Year - Streaminds</div>
+ <div class="text-muted">Designed with ❤️ • Modern UI</div>
+ </div>
+ </footer>
+
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+ @RenderSection("Scripts", required: false)
+</body>
+</html>

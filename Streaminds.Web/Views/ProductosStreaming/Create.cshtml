@@ -1,0 +1,15 @@
+@model Streaminds.Web.Models.Dto.ProductoStreamingDto
+@{
+ ViewData["Title"] = "Crear Producto";
+}
+<div class="container mt-4">
+ <h1>Crear Producto Streaming</h1>
+ <form asp-action="Create" method="post">
+ @await Html.PartialAsync("ProductCreateEditPartial", Model)
+ <button class="btn btn-primary">Crear</button>
+ <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+ </form>
+</div>
+@section Scripts {
+ <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,16 @@
+@model Streaminds.Web.Models.Dto.ClienteDto
+<div class="mb-3">
+ <label asp-for="Email" class="form-label"></label>
+ <input asp-for="Email" class="form-control" />
+ <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+<div class="mb-3">
+ <label asp-for="NombreCompleto" class="form-label"></label>
+ <input asp-for="NombreCompleto" class="form-control" />
+ <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+</div>
+<div class="form-check mb-3">
+ <input asp-for="Activo" class="form-check-input" />
+ <label asp-for="Activo" class="form-check-label"></label>
+</div>
+<input type="hidden" asp-for="Id" />

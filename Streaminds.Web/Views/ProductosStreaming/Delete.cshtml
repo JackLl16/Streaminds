@@ -1,0 +1,21 @@
+@model Streaminds.Web.Models.Dto.ProductoStreamingDto
+@{
+ ViewData["Title"] = "Eliminar Producto";
+}
+<div class="container mt-4">
+ <h1>Eliminar Producto Streaming</h1>
+ <div class="alert alert-warning">¿Desea eliminar el siguiente producto?</div>
+ <dl class="row">
+ <dt class="col-sm-3">Nombre</dt>
+ <dd class="col-sm-9">@Model.Nombre</dd>
+ <dt class="col-sm-3">Tipo</dt>
+ <dd class="col-sm-9">@Model.TipoProducto</dd>
+ <dt class="col-sm-3">Precio</dt>
+ <dd class="col-sm-9">@Model.Precio.ToString("C")</dd>
+ </dl>
+ <form asp-action="Delete" method="post">
+ <input type="hidden" asp-for="Id" />
+ <button class="btn btn-danger">Eliminar</button>
+ <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+ </form>
+</div>

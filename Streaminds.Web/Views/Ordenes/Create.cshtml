@@ -1,0 +1,97 @@
+@model Streaminds.Web.Models.Dto.OrdenCreateDto
+@{
+ ViewData["Title"] = "Crear Orden";
+ var clientes = ViewData["Clientes"] as IEnumerable<Streaminds.Domain.Entities.Cliente>;
+ var productos = ViewData["Productos"] as IEnumerable<Streaminds.Domain.Entities.ProductoStreaming>;
+}
+<div class="container mt-4">
+ <h1>Crear Orden</h1>
+ <form asp-action="Create" method="post" id="orderForm">
+ <div class="mb-3">
+ <label class="form-label">Cliente</label>
+ <select asp-for="ClienteId" class="form-select">
+ <option value="">-- Seleccione --</option>
+ @foreach (var c in clientes)
+ {
+ <option value="@c.Id">@c.NombreCompleto (@c.Email)</option>
+ }
+ </select>
+ <span asp-validation-for="ClienteId" class="text-danger"></span>
+ </div>
+
+ <h4>Productos</h4>
+ <div class="row">
+ <div class="col-md-6">
+ <select id="productoSelect" class="form-select mb-2">
+ <option value="">-- Seleccione Producto --</option>
+ @foreach (var p in productos)
+ {
+ <option value="@p.Id" data-precio="@p.Precio">@p.Nombre - @p.TipoProducto - @p.Precio.ToString("C")</option>
+ }
+ </select>
+ </div>
+ <div class="col-md-3">
+ <input type="number" id="cantidadInput" class="form-control" value="1" min="1" />
+ </div>
+ <div class="col-md-3">
+ <button type="button" id="addBtn" class="btn btn-primary">Agregar</button>
+ </div>
+ </div>
+
+ <table class="table mt-3" id="cartTable">
+ <thead>
+ <tr><th>Producto</th><th>Cantidad</th><th>Precio Unit.</th><th>Subtotal</th><th></th></tr>
+ </thead>
+ <tbody></tbody>
+ </table>
+
+ <input type="hidden" name="ItemsJson" id="ItemsJson" />
+ <button class="btn btn-success">Registrar Orden</button>
+ <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+ </form>
+</div>
+
+@section Scripts {
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ <script>
+ $(function(){
+ var cart = [];
+ function refresh(){
+ var tbody = $('#cartTable tbody'); tbody.empty();
+ cart.forEach(function(it, idx){
+ var row = `<tr data-idx="${idx}"><td>${it.nombre}</td><td>${it.cantidad}</td><td>${it.precio.toFixed(2)}</td><td>${(it.precio*it.cantidad).toFixed(2)}</td><td><button class="btn btn-sm btn-danger remove">X</button></td></tr>`;
+ tbody.append(row);
+ });
+ $('#ItemsJson').val(JSON.stringify(cart));
+ }
+ $('#addBtn').click(function(){
+ var pid = $('#productoSelect').val();
+ var cantidad = parseInt($('#cantidadInput').val()||'1');
+ if(!pid) return alert('Seleccione producto');
+ var opt = $('#productoSelect option:selected');
+ var nombre = opt.text();
+ var precio = parseFloat(opt.data('precio')) ||0;
+ cart.push({productoId: parseInt(pid), cantidad: cantidad, nombre: nombre, precio: precio});
+ refresh();
+ });
+ $('#cartTable').on('click', '.remove', function(){
+ var idx = $(this).closest('tr').data('idx');
+ cart.splice(idx,1);
+ refresh();
+ });
+ $('#orderForm').submit(function(){
+ if(!$('#ClienteId').val()) { alert('Seleccione cliente'); return false; }
+ if(cart.length==0){ alert('Agregue al menos un producto'); return false; }
+ // populate Items from cart
+ var items = cart.map(c => ({ ProductoStreamingId: c.productoId, Cantidad: c.cantidad }));
+ // append hidden inputs for model binder
+ $('#orderForm').find('input[name^="Items["]').remove();
+ items.forEach(function(it, idx){
+ $('#orderForm').append(`<input type="hidden" name="Items[${idx}].ProductoStreamingId" value="${it.ProductoStreamingId}" />`);
+ $('#orderForm').append(`<input type="hidden" name="Items[${idx}].Cantidad" value="${it.Cantidad}" />`);
+ });
+ return true;
+ });
+ });
+ </script>
+}
